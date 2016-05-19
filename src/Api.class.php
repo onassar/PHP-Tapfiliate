@@ -164,10 +164,11 @@
                 )
             );
             if (empty($data) === false) {
-                $options['http']['header'] .= "\r\nContent-type: application/json";
-                $options['http']['content'] = http_build_query($data);
+                $contentType = 'application/json';
+                $options['http']['header'] .= "\r\nContent-type: " .
+                    ($contentType);
+                $options['http']['content'] = json_encode($data);
             }
-// prx($options);
             $url = ($this->_base) . ($path);
             $context = stream_context_create($options);
             $response = $this->_attempt($url, $context);
@@ -180,7 +181,8 @@
                 }
                 return false;
             }
-            return $response['content'];
+            $associative = $this->_tapfiliate->associative();
+            return json_decode($response['content'], $associative);
         }
 
         /**

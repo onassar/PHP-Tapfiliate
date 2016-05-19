@@ -18,6 +18,14 @@
     class Tapfiliate
     {
         /**
+         * _associative
+         * 
+         * @var    boolean (default: true)
+         * @access protected
+         */
+        protected $_associative = true;
+
+        /**
          * _debug
          * 
          * @var    boolean (default: false)
@@ -49,10 +57,11 @@
          * @param  boolean $debug (defaul: false)
          * @return void
          */
-        public function __construct($key, $debug = false)
+        public function __construct($key, $debug = false, $associative = true)
         {
             $this->_key = $key;
             $this->_debug = $debug;
+            $this->_associative = $associative;
         }
 
         /**
@@ -95,6 +104,17 @@
                 $this->_sub['conversions'] = new Conversions($this);
             }
             return $this->_sub['conversions'];
+        }
+
+        /**
+         * associative
+         * 
+         * @access public
+         * @return boolean
+         */
+        public function associative()
+        {
+            return $this->_associative;
         }
 
         /**

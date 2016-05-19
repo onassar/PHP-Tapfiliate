@@ -44,15 +44,15 @@
          */
         public function create(array $data = array())
         {
-            if (isset($data['conversionId']) === false) {
-                throw new \Exception('conversionId must be specified');
+            if (isset($data['conversion_id']) === false) {
+                throw new \Exception('conversion_id must be specified');
             }
             if (isset($data['sub_amount']) === false) {
                 throw new \Exception('sub_amount must be specified');
             }
-            $conversionId = $data['conversionId'];
-            unset($data['conversionId']);
-            $path = 'conversions/' . ($conversionId) . '/commissions/';
+            $conversion_id = $data['conversion_id'];
+            unset($data['conversion_id']);
+            $path = 'conversions/' . ($conversion_id) . '/commissions/';
             return $this->_post($path, array(), $data);
         }
     }
