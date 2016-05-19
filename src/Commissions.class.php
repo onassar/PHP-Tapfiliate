@@ -51,6 +51,7 @@
                 throw new \Exception('sub_amount must be specified');
             }
             $conversionId = $data['conversionId'];
+            unset($data['conversionId']);
             $path = 'conversions/' . ($conversionId) . '/commissions/';
             return $this->_post($path, array(), $data);
         }

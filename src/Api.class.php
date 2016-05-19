@@ -50,6 +50,34 @@
         }
 
         /**
+         * _attempt
+         * 
+         * Attempts to call the endpoint, ensuring that no native error handling
+         * can intercept a failed request.
+         * 
+         * @access protected
+         * @param  string $url
+         * @param  resource $context
+         * @return array
+         */
+        protected function _attempt($url, $context)
+        {
+            set_error_handler(function() {});
+            $response = file_get_contents($url, false, $context);
+            restore_error_handler();
+            if ($response === false) {
+                return array(
+                    'success' => false,
+                    'response' => $http_response_header
+                );
+            }
+            return array(
+                'success' => true,
+                'content' => $response
+            );
+        }
+
+        /**
          * _delete
          * 
          * @access protected
@@ -136,12 +164,23 @@
                 )
             );
             if (empty($data) === false) {
-                $options['http']['header'] .= '\nContent-type: application/x-www-form-urlencoded';
+                $options['http']['header'] .= "\r\nContent-type: application/json";
                 $options['http']['content'] = http_build_query($data);
             }
+// prx($options);
             $url = ($this->_base) . ($path);
             $context = stream_context_create($options);
-            return file_get_contents($url, false, $context);
+            $response = $this->_attempt($url, $context);
+            if ($response['success'] === false) {
+                if ($this->_tapfiliate->debug() === true) {
+                    echo '<pre>';
+                    print_r($response);
+                    echo '</pre>';
+                    exit(0);
+                }
+                return false;
+            }
+            return $response['content'];
         }
 
         /**
@@ -161,14 +200,14 @@
          * create
          * 
          * @access public
-         * @param  array $params = array()
+         * @param  array $data = array()
          * @return array
          */
-        public function create(array $params = array())
+        public function create(array $data = array())
         {
             throw new \Exception('Not yet implemented');
             $path = ($this->_directory) .'/';
-            return $this->_post($path, $params);
+            return $this->_post($path, $data);
         }
 
         /**
