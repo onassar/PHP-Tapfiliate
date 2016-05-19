@@ -2,6 +2,8 @@
 
     // Namespace and dependencies
     namespace Tapfiliate;
+    require_once 'Affiliates.class.php';
+    require_once 'Commissions.class.php';
     require_once 'Conversions.class.php';
     require_once 'Programs.class.php';
 
@@ -24,6 +26,14 @@
         protected $_key;
 
         /**
+         * _sub
+         * 
+         * @var    array
+         * @access protected
+         */
+        protected $_sub = array();
+
+        /**
          * __construct
          * 
          * @access public
@@ -43,7 +53,10 @@
          */
         public function affiliates()
         {
-            return new Affiliates($this->_key);
+            if (isset($this->_sub['affiliates']) === false) {
+                $this->_sub['affiliates'] = new Affiliates($this);
+            }
+            return $this->_sub['affiliates'];
         }
 
         /**
@@ -54,7 +67,10 @@
          */
         public function commissions()
         {
-            return new Commissions($this->_key);
+            if (isset($this->_sub['commissions']) === false) {
+                $this->_sub['commissions'] = new Commissions($this);
+            }
+            return $this->_sub['commissions'];
         }
 
         /**
@@ -65,7 +81,21 @@
          */
         public function conversions()
         {
-            return new Conversions($this->_key);
+            if (isset($this->_sub['conversions']) === false) {
+                $this->_sub['conversions'] = new Conversions($this);
+            }
+            return $this->_sub['conversions'];
+        }
+
+        /**
+         * getKey
+         * 
+         * @access public
+         * @return string
+         */
+        public function getKey()
+        {
+            return $this->_key;
         }
 
         /**
@@ -76,6 +106,9 @@
          */
         public function programs()
         {
-            return new Programs($this->_key);
+            if (isset($this->_sub['programs']) === false) {
+                $this->_sub['programs'] = new Programs($this);
+            }
+            return $this->_sub['programs'];
         }
     }

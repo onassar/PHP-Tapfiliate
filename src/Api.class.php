@@ -30,23 +30,23 @@
         protected $_directory = false;
 
         /**
-         * _key
+         * _tapfiliate
          * 
-         * @var    string
+         * @var    Tapfiliate
          * @access protected
          */
-        protected $_key;
+        protected $_tapfiliate;
 
         /**
          * __construct
          * 
          * @access public
-         * @param string $key
+         * @param  Tapfiliate $tapfiliate
          * @return void
          */
-        public function __construct($key)
+        public function __construct(Tapfiliate $tapfiliate)
         {
-            $this->_key = $key;
+            $this->_tapfiliate = $tapfiliate;
         }
 
         /**
@@ -71,8 +71,50 @@
          */
         protected function _get($path, array $params = array())
         {
-            $path = ($path) . '?' . http_build_query($params);
+            if (empty($params) === false) {
+                $path = ($path) . '?' . http_build_query($params);
+            }
             return $this->_request('get', $path);
+        }
+
+        /**
+         * _post
+         * 
+         * @access protected
+         * @param  string $path
+         * @param  array $params = array()
+         * @param  array $data = array()
+         * @return false|array|stdClass
+         */
+        protected function _post(
+            $path,
+            array $params = array(),
+            array $data = array()
+        ) {
+            if (empty($params) === false) {
+                $path = ($path) . '?' . http_build_query($params);
+            }
+            return $this->_request('post', $path, $data);
+        }
+
+        /**
+         * _put
+         * 
+         * @access protected
+         * @param  string $path
+         * @param  array $params = array()
+         * @param  array $data = array()
+         * @return false|array|stdClass
+         */
+        protected function _put(
+            $path,
+            array $params = array(),
+            array $data = array()
+        ) {
+            if (empty($params) === false) {
+                $path = ($path) . '?' . http_build_query($params);
+            }
+            return $this->_request('put', $path, $data);
         }
 
         /**
@@ -81,17 +123,22 @@
          * @access protected
          * @param  string $method
          * @param  string $path
-         * @param  array $params = array()
+         * @param  array $data = array()
          * @return false|array|stdClass
          */
-        public function _request($method, $path, array $params = array())
+        public function _request($method, $path, array $data = array())
         {
+            $key = $this->_tapfiliate->getKey();
             $options = array(
-              'http' => array(
-                'method' => strtoupper($method),
-                'header' => 'Api-Key: ' . ($this->_key)
-              )
+                'http' => array(
+                    'method' => strtoupper($method),
+                    'header' => 'Api-Key: ' . ($key)
+                )
             );
+            if (empty($data) === false) {
+                $options['http']['header'] .= '\nContent-type: application/x-www-form-urlencoded';
+                $options['http']['content'] = http_build_query($data);
+            }
             $url = ($this->_base) . ($path);
             $context = stream_context_create($options);
             return file_get_contents($url, false, $context);
@@ -119,7 +166,7 @@
          */
         public function create(array $params = array())
         {
-            throw new Exception('untested');
+            throw new \Exception('Not yet implemented');
             $path = ($this->_directory) .'/';
             return $this->_post($path, $params);
         }
@@ -147,6 +194,6 @@
         public function put($id)
         {
             $path = ($this->_directory) .'/' . ($id) . '/';
-            return $this->_get($path);
+            return $this->_put($path);
         }
     }

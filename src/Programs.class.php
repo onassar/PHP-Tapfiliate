@@ -21,16 +21,4 @@
          * @access protected
          */
         protected $_directory = 'programs';
-
-        /**
-         * all
-         * 
-         * @access public
-         * @param  int $id
-         * @return mixed
-         */
-        public function get($id)
-        {
-            throw new Exception('Not yet supported by Tapfiliate');
-        }
     }
