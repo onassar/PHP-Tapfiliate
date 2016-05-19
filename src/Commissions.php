@@ -5,32 +5,33 @@
     require_once 'Api.class.php';
 
     /**
-     * Programs
+     * Commissions
      * 
      * @author  Oliver Nassar <onassar@gmail.com>
      * @see     https://github.com/onassar/PHP-Tapfiliate
      * @extends Api
      * @final
      */
-    final class Programs extends Api
+    final class Commissions extends Api
     {
         /**
          * _directory
          * 
-         * @var    string (default: 'programs')
+         * @var    string (default: 'commissions')
          * @access protected
          */
-        protected $_directory = 'programs';
+        protected $_directory = 'commissions';
 
         /**
          * all
          * 
+         * @see    http://docs.tapfiliate.apiary.io/#reference/commissions
          * @access public
-         * @param  int $id
-         * @return mixed
+         * @param  array $params = array()
+         * @return array
          */
-        public function get($id)
+        public function all(array $params = array())
         {
-            throw new Exception('Not yet supported by Tapfiliate');
+            throw new Exception('Invalid API request');
         }
     }

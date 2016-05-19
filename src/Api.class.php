@@ -136,4 +136,17 @@
             $path = ($this->_directory) .'/' . ($id) . '/';
             return $this->_get($path);
         }
+
+        /**
+         * put
+         * 
+         * @access public
+         * @param  int $id
+         * @return mixed
+         */
+        public function put($id)
+        {
+            $path = ($this->_directory) .'/' . ($id) . '/';
+            return $this->_get($path);
+        }
     }

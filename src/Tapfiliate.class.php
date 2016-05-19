@@ -36,6 +36,17 @@
         }
 
         /**
+         * affiliates
+         * 
+         * @access public
+         * @return Affiliates
+         */
+        public function affiliates()
+        {
+            return new Affiliates($this->_key);
+        }
+
+        /**
          * commissions
          * 
          * @access public
