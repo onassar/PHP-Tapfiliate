@@ -28,7 +28,7 @@
          * @see    http://docs.tapfiliate.apiary.io/#reference/commissions
          * @access public
          * @param  array $params = array()
-         * @return array
+         * @return false|stdClass|array
          */
         public function all(array $params = array())
         {
@@ -40,7 +40,7 @@
          * 
          * @access public
          * @param  array $data
-         * @return array
+         * @return false|stdClass|array
          */
         public function create(array $data = array())
         {
@@ -54,5 +54,18 @@
             unset($data['conversion_id']);
             $path = 'conversions/' . ($conversion_id) . '/commissions/';
             return $this->_post($path, array(), $data);
+        }
+
+        /**
+         * disapprove
+         * 
+         * @access public
+         * @param  int $id
+         * @return false|stdClass|array
+         */
+        public function disapprove($id)
+        {
+            $path = 'commissions/' . ($id) . '/approval';
+            return $this->_delete($path);
         }
     }
