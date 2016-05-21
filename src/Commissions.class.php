@@ -78,7 +78,7 @@
          */
         public function disapprove($id)
         {
-            $path = 'commissions/' . ($id) . '/approval';
+            $path = 'commissions/' . ($id) . '/approval/';
             return $this->_delete($path);
         }
     }
