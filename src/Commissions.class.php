@@ -36,6 +36,19 @@
         }
 
         /**
+         * approve
+         * 
+         * @access public
+         * @param  int $id
+         * @return false|stdClass|array
+         */
+        public function approve($id)
+        {
+            $path = 'commissions/' . ($id) . '/approval/';
+            return $this->_put($path);
+        }
+
+        /**
          * create
          * 
          * @access public
