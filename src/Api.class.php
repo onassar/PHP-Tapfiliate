@@ -232,9 +232,9 @@
          * @param  int $id
          * @return mixed
          */
-        public function put($id)
-        {
-            $path = ($this->_directory) .'/' . ($id) . '/';
-            return $this->_put($path);
-        }
+        // public function put($id)
+        // {
+        //     $path = ($this->_directory) .'/' . ($id) . '/';
+        //     return $this->_put($path);
+        // }
     }
