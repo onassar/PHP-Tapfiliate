@@ -230,11 +230,12 @@
          * 
          * @access public
          * @param  int $id
+         * @param  array $attributes
          * @return mixed
          */
-        // public function put($id)
-        // {
-        //     $path = ($this->_directory) .'/' . ($id) . '/';
-        //     return $this->_put($path);
-        // }
+        public function put($id, array $attributes)
+        {
+            $path = ($this->_directory) .'/' . ($id) . '/';
+            return $this->_put($path, array(), $attributes);
+        }
     }
