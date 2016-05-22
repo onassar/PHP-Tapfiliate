@@ -66,7 +66,7 @@
             $conversion_id = $data['conversion_id'];
             unset($data['conversion_id']);
             $path = 'conversions/' . ($conversion_id) . '/commissions/';
-            return $this->_post($path, array(), $data);
+            return $this->_post($path, array(), array($data));
         }
 
         /**
