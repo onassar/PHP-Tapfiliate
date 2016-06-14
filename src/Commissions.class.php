@@ -39,7 +39,7 @@
          * approve
          * 
          * @access public
-         * @param  int $id
+         * @param  integer $id
          * @return false|stdClass|array
          */
         public function approve($id)
@@ -73,7 +73,7 @@
          * disapprove
          * 
          * @access public
-         * @param  int $id
+         * @param  integer $id
          * @return false|stdClass|array
          */
         public function disapprove($id)

@@ -216,7 +216,7 @@
          * get
          * 
          * @access public
-         * @param  int $id
+         * @param  integer $id
          * @return mixed
          */
         public function get($id)
@@ -229,7 +229,7 @@
          * put
          * 
          * @access public
-         * @param  int $id
+         * @param  integer $id
          * @param  array $attributes
          * @return mixed
          */
