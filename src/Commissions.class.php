@@ -17,18 +17,19 @@
         /**
          * _directory
          * 
-         * @var    string (default: 'commissions')
-         * @access protected
+         * @var     string (default: 'commissions')
+         * @access  protected
          */
         protected $_directory = 'commissions';
 
         /**
          * all
          * 
-         * @see    http://docs.tapfiliate.apiary.io/#reference/commissions
-         * @access public
-         * @param  array $params = array()
-         * @return false|stdClass|array
+         * @see     http://docs.tapfiliate.apiary.io/#reference/commissions
+         * @throws  Exception
+         * @access  public
+         * @param   array $params (default: array())
+         * @return  false|stdClass|array
          */
         public function all(array $params = array())
         {
@@ -38,9 +39,9 @@
         /**
          * approve
          * 
-         * @access public
-         * @param  integer $id
-         * @return false|stdClass|array
+         * @access  public
+         * @param   integer $id
+         * @return  false|stdClass|array
          */
         public function approve($id)
         {
@@ -51,9 +52,9 @@
         /**
          * create
          * 
-         * @access public
-         * @param  array $data
-         * @return false|stdClass|array
+         * @access  public
+         * @param   array $data (default: array())
+         * @return  false|stdClass|array
          */
         public function create(array $data = array())
         {
@@ -72,9 +73,9 @@
         /**
          * disapprove
          * 
-         * @access public
-         * @param  integer $id
-         * @return false|stdClass|array
+         * @access  public
+         * @param   integer $id
+         * @return  false|stdClass|array
          */
         public function disapprove($id)
         {

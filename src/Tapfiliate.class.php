@@ -12,50 +12,50 @@
      * 
      * PHP OAuth wrapper for Tapfiliate, using PECL OAuth library
      * 
-     * @author Oliver Nassar <onassar@gmail.com>
-     * @see    https://github.com/onassar/PHP-Tapfiliate
+     * @author  Oliver Nassar <onassar@gmail.com>
+     * @see     https://github.com/onassar/PHP-Tapfiliate
      */
     class Tapfiliate
     {
         /**
          * _associative
          * 
-         * @var    boolean (default: true)
-         * @access protected
+         * @var     boolean (default: true)
+         * @access  protected
          */
         protected $_associative = true;
 
         /**
          * _debug
          * 
-         * @var    boolean (default: false)
-         * @access protected
+         * @var     boolean (default: false)
+         * @access  protected
          */
         protected $_debug = false;
 
         /**
          * _key
          * 
-         * @var    string
-         * @access protected
+         * @var     string
+         * @access  protected
          */
         protected $_key;
 
         /**
          * _sub
          * 
-         * @var    array
-         * @access protected
+         * @var     array
+         * @access  protected
          */
         protected $_sub = array();
 
         /**
          * __construct
          * 
-         * @access public
-         * @param  string $key
-         * @param  boolean $debug (defaul: false)
-         * @return void
+         * @access  public
+         * @param   string $key
+         * @param   boolean $debug (defaul: false)
+         * @return  void
          */
         public function __construct($key, $debug = false, $associative = true)
         {
@@ -67,8 +67,8 @@
         /**
          * affiliates
          * 
-         * @access public
-         * @return Affiliates
+         * @access  public
+         * @return  Affiliates
          */
         public function affiliates()
         {
@@ -81,8 +81,8 @@
         /**
          * commissions
          * 
-         * @access public
-         * @return Commissions
+         * @access  public
+         * @return  Commissions
          */
         public function commissions()
         {
@@ -95,8 +95,8 @@
         /**
          * conversions
          * 
-         * @access public
-         * @return Conversions
+         * @access  public
+         * @return  Conversions
          */
         public function conversions()
         {
@@ -109,8 +109,8 @@
         /**
          * associative
          * 
-         * @access public
-         * @return boolean
+         * @access  public
+         * @return  boolean
          */
         public function associative()
         {
@@ -120,8 +120,8 @@
         /**
          * debug
          * 
-         * @access public
-         * @return boolean
+         * @access  public
+         * @return  boolean
          */
         public function debug()
         {
@@ -131,8 +131,8 @@
         /**
          * getKey
          * 
-         * @access public
-         * @return string
+         * @access  public
+         * @return  string
          */
         public function getKey()
         {
@@ -142,8 +142,8 @@
         /**
          * programs
          * 
-         * @access public
-         * @return Programs
+         * @access  public
+         * @return  Programs
          */
         public function programs()
         {

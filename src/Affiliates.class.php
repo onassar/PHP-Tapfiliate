@@ -17,8 +17,8 @@
         /**
          * _directory
          * 
-         * @var    string (default: 'affiliates')
-         * @access protected
+         * @var     string (default: 'affiliates')
+         * @access  protected
          */
         protected $_directory = 'affiliates';
     }
