@@ -190,7 +190,7 @@
          * 
          * @access  public
          * @param   array $params (default: array())
-         * @return  array
+         * @return  false|array|stdClass
          */
         public function all(array $params = array())
         {
@@ -203,7 +203,7 @@
          * 
          * @access  public
          * @param   array $data (default: array())
-         * @return  array
+         * @return  false|array|stdClass
          */
         public function create(array $data = array())
         {
@@ -217,7 +217,7 @@
          * 
          * @access  public
          * @param   integer $id
-         * @return  mixed
+         * @return  false|array|stdClass
          */
         public function get($id)
         {
@@ -231,7 +231,7 @@
          * @access  public
          * @param   integer $id
          * @param   array $attributes
-         * @return  mixed
+         * @return  false|array|stdClass
          */
         public function put($id, array $attributes)
         {
