@@ -213,6 +213,19 @@
         }
 
         /**
+         * delete
+         * 
+         * @access  public
+         * @param   integer $id
+         * @return  false|array|stdClass
+         */
+        public function delete($id)
+        {
+            $path = ($this->_directory) .'/' . ($id) . '/';
+            return $this->_delete($path);
+        }
+
+        /**
          * get
          * 
          * @access  public
