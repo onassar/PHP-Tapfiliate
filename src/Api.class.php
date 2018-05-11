@@ -50,6 +50,45 @@
         }
 
         /**
+         * _isMore
+         * 
+         * @access  protected
+         * @param   array $headers
+         * @return  boolean
+         */
+        protected function _isMore(array $headers)
+        {
+            foreach ($headers as $header) {
+                if (strstr($header, 'rel="next"') !== false) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /**
+         * _getNextPageLink
+         * 
+         * @throws  Exception
+         * @access  protected
+         * @param   array $headers
+         * @return  string
+         */
+        protected function _getNextPageLink(array $headers)
+        {
+            foreach ($headers as $header) {
+                if (strstr($header, 'rel="next"') !== false) {
+                    $pattern = '/(https:\/\/.+)>; rel="next/';
+                    preg_match($pattern, $header, $matches);
+                    $link = array_pop($matches);
+                    return $link;
+                }
+            }
+            $msg = 'Could not find next page link';
+            throw new Exception($msg);
+        }
+
+        /**
          * _attempt
          * 
          * Attempts to call the endpoint, ensuring that no native error handling
@@ -58,9 +97,10 @@
          * @access  protected
          * @param   string $url
          * @param   resource $context
+         * @param   boolean $recursive (default: false)
          * @return  array
          */
-        protected function _attempt($url, $context)
+        protected function _attempt($url, $context, $recursive = false)
         {
             set_error_handler(function() {});
             $response = file_get_contents($url, false, $context);
@@ -70,6 +110,27 @@
                     'success' => false,
                     'response' => $http_response_header
                 );
+            }
+            if ($recursive === true) {
+                if ($this->_isMore($http_response_header) === true) {
+                    $link = $this->_getNextPageLink($http_response_header);
+                    $recursiveResponse = $this->_attempt($link, $context);
+                    if ($recursiveResponse !== false) {
+                        $decodedRecursiveResponse = json_decode(
+                            $recursiveResponse['content'],
+                            true
+                        );
+                        $decodedResponse = json_decode(
+                            $response,
+                            true
+                        );
+                        $mergedResponse = array_merge(
+                            $decodedResponse,
+                            $decodedRecursiveResponse
+                        );
+                        $response = json_encode($mergedResponse);
+                    }
+                }
             }
             return array(
                 'success' => true,
@@ -99,10 +160,15 @@
          */
         protected function _get($path, array $params = array())
         {
+            $recursive = false;
+            if (isset($params['recursive']) === true) {
+                $recursive = $params['recursive'] === true;
+                unset($params['recursive']);
+            }
             if (empty($params) === false) {
                 $path = ($path) . '?' . http_build_query($params);
             }
-            return $this->_request('get', $path);
+            return $this->_request('get', $path, array(), $recursive);
         }
 
         /**
@@ -152,10 +218,15 @@
          * @param   string $method
          * @param   string $path
          * @param   array $data (default: array())
+         * @param   boolean $recursive (default: false)
          * @return  false|array|stdClass
          */
-        public function _request($method, $path, array $data = array())
-        {
+        public function _request(
+            $method,
+            $path,
+            array $data = array(),
+            $recursive = false
+        ) {
             $key = $this->_tapfiliate->getKey();
             $options = array(
                 'http' => array(
@@ -171,7 +242,7 @@
             }
             $url = ($this->_base) . ($path);
             $context = stream_context_create($options);
-            $response = $this->_attempt($url, $context);
+            $response = $this->_attempt($url, $context, $recursive);
             if ($response['success'] === false) {
                 if ($this->_tapfiliate->debug() === true) {
                     echo '<pre>';

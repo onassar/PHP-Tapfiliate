@@ -5,6 +5,7 @@
     require_once 'Affiliates.class.php';
     require_once 'Commissions.class.php';
     require_once 'Conversions.class.php';
+    require_once 'Payouts.class.php';
     require_once 'Programs.class.php';
 
     /**
@@ -79,6 +80,17 @@
         }
 
         /**
+         * associative
+         * 
+         * @access  public
+         * @return  boolean
+         */
+        public function associative()
+        {
+            return $this->_associative;
+        }
+
+        /**
          * commissions
          * 
          * @access  public
@@ -90,6 +102,17 @@
                 $this->_sub['commissions'] = new Commissions($this);
             }
             return $this->_sub['commissions'];
+        }
+
+        /**
+         * debug
+         * 
+         * @access  public
+         * @return  boolean
+         */
+        public function debug()
+        {
+            return $this->_debug;
         }
 
         /**
@@ -107,28 +130,6 @@
         }
 
         /**
-         * associative
-         * 
-         * @access  public
-         * @return  boolean
-         */
-        public function associative()
-        {
-            return $this->_associative;
-        }
-
-        /**
-         * debug
-         * 
-         * @access  public
-         * @return  boolean
-         */
-        public function debug()
-        {
-            return $this->_debug;
-        }
-
-        /**
          * getKey
          * 
          * @access  public
@@ -137,6 +138,20 @@
         public function getKey()
         {
             return $this->_key;
+        }
+
+        /**
+         * payouts
+         * 
+         * @access  public
+         * @return  Affiliates
+         */
+        public function payouts()
+        {
+            if (isset($this->_sub['payouts']) === false) {
+                $this->_sub['payouts'] = new Payouts($this);
+            }
+            return $this->_sub['payouts'];
         }
 
         /**

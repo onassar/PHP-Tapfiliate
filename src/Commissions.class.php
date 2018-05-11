@@ -23,20 +23,6 @@
         protected $_directory = 'commissions';
 
         /**
-         * all
-         * 
-         * @see     http://docs.tapfiliate.apiary.io/#reference/commissions
-         * @throws  Exception
-         * @access  public
-         * @param   array $params (default: array())
-         * @return  false|stdClass|array
-         */
-        public function all(array $params = array())
-        {
-            throw new \Exception('Invalid API request');
-        }
-
-        /**
          * approve
          * 
          * @access  public
