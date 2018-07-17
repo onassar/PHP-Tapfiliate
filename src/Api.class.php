@@ -265,7 +265,7 @@
          */
         public function all(array $params = array())
         {
-            $path = ($this->_directory) .'/';
+            $path = ($this->_directory) . '/';
             return $this->_get($path, $params);
         }
 
@@ -279,7 +279,7 @@
         public function create(array $data = array())
         {
             throw new \Exception('Not yet implemented');
-            $path = ($this->_directory) .'/';
+            $path = ($this->_directory) . '/';
             return $this->_post($path, $data);
         }
 
@@ -292,7 +292,7 @@
          */
         public function delete($id)
         {
-            $path = ($this->_directory) .'/' . ($id) . '/';
+            $path = ($this->_directory) . '/' . ($id) . '/';
             return $this->_delete($path);
         }
 
@@ -305,7 +305,7 @@
          */
         public function get($id)
         {
-            $path = ($this->_directory) .'/' . ($id) . '/';
+            $path = ($this->_directory) . '/' . ($id) . '/';
             return $this->_get($path);
         }
 
@@ -319,7 +319,7 @@
          */
         public function put($id, array $attributes)
         {
-            $path = ($this->_directory) .'/' . ($id) . '/';
+            $path = ($this->_directory) . '/' . ($id) . '/';
             return $this->_put($path, array(), $attributes);
         }
     }

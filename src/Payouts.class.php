@@ -31,7 +31,7 @@
          */
         public function paid($id)
         {
-            $path = ($this->_directory) .'/' . ($id) . '/paid/';
+            $path = ($this->_directory) . '/' . ($id) . '/paid/';
             return $this->_put($path);
         }
     }
