@@ -55,7 +55,7 @@
          * 
          * @access  public
          * @param   string $key
-         * @param   boolean $debug (defaul: false)
+         * @param   boolean $debug (default: false)
          * @return  void
          */
         public function __construct($key, $debug = false, $associative = true)
