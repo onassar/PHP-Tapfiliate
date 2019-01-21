@@ -106,9 +106,13 @@
             $response = file_get_contents($url, false, $context);
             restore_error_handler();
             if ($response === false) {
+                $response = array();
+                if (isset($http_response_header) === true) {
+                    $response = $http_response_header;
+                }
                 return array(
                     'success' => false,
-                    'response' => $http_response_header
+                    'response' => $response
                 );
             }
             if ($recursive === true) {
