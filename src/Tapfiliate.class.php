@@ -46,7 +46,7 @@
          * _sub
          * 
          * @access  protected
-         * @var     array
+         * @var     array (default: array())
          */
         protected $_sub = array();
 
