@@ -17,8 +17,8 @@
         /**
          * _directory
          * 
-         * @var     string (default: 'conversions')
          * @access  protected
+         * @var     string (default: 'conversions')
          */
         protected $_directory = 'conversions';
     }

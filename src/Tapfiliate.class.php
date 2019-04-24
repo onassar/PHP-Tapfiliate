@@ -21,32 +21,32 @@
         /**
          * _associative
          * 
-         * @var     boolean (default: true)
          * @access  protected
+         * @var     bool (default: true)
          */
         protected $_associative = true;
 
         /**
          * _debug
          * 
-         * @var     boolean (default: false)
          * @access  protected
+         * @var     bool (default: false)
          */
         protected $_debug = false;
 
         /**
          * _key
          * 
-         * @var     string
          * @access  protected
+         * @var     string
          */
         protected $_key;
 
         /**
          * _sub
          * 
-         * @var     array
          * @access  protected
+         * @var     array
          */
         protected $_sub = array();
 
@@ -55,7 +55,7 @@
          * 
          * @access  public
          * @param   string $key
-         * @param   boolean $debug (default: false)
+         * @param   bool $debug (default: false)
          * @return  void
          */
         public function __construct($key, $debug = false, $associative = true)
@@ -83,7 +83,7 @@
          * associative
          * 
          * @access  public
-         * @return  boolean
+         * @return  bool
          */
         public function associative()
         {
@@ -108,7 +108,7 @@
          * debug
          * 
          * @access  public
-         * @return  boolean
+         * @return  bool
          */
         public function debug()
         {

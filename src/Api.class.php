@@ -16,24 +16,24 @@
         /**
          * _base
          * 
-         * @var     string
          * @access  protected
+         * @var     string
          */
         protected $_base = 'https://tapfiliate.com/api/1.4/';
 
         /**
          * _directory
          * 
-         * @var     false|string (default: false)
          * @access  protected
+         * @var     false|string (default: false)
          */
         protected $_directory = false;
 
         /**
          * _tapfiliate
          * 
-         * @var     Tapfiliate
          * @access  protected
+         * @var     Tapfiliate
          */
         protected $_tapfiliate;
 
@@ -54,7 +54,7 @@
          * 
          * @access  protected
          * @param   array $headers
-         * @return  boolean
+         * @return  bool
          */
         protected function _isMore(array $headers)
         {
@@ -97,7 +97,7 @@
          * @access  protected
          * @param   string $url
          * @param   resource $context
-         * @param   boolean $recursive (default: false)
+         * @param   bool $recursive (default: false)
          * @return  array
          */
         protected function _attempt($url, $context, $recursive = false)
@@ -222,7 +222,7 @@
          * @param   string $method
          * @param   string $path
          * @param   array $data (default: array())
-         * @param   boolean $recursive (default: false)
+         * @param   bool $recursive (default: false)
          * @return  false|array|stdClass
          */
         public function _request(
@@ -291,7 +291,7 @@
          * delete
          * 
          * @access  public
-         * @param   integer $id
+         * @param   int $id
          * @return  false|array|stdClass
          */
         public function delete($id)
@@ -304,7 +304,7 @@
          * get
          * 
          * @access  public
-         * @param   integer $id
+         * @param   int $id
          * @return  false|array|stdClass
          */
         public function get($id)
@@ -317,7 +317,7 @@
          * put
          * 
          * @access  public
-         * @param   integer $id
+         * @param   int $id
          * @param   array $attributes
          * @return  false|array|stdClass
          */

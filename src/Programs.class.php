@@ -17,8 +17,8 @@
         /**
          * _directory
          * 
-         * @var     string (default: 'programs')
          * @access  protected
+         * @var     string (default: 'programs')
          */
         protected $_directory = 'programs';
     }

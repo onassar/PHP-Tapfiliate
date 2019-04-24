@@ -17,8 +17,8 @@
         /**
          * _directory
          * 
-         * @var     string (default: 'payouts')
          * @access  protected
+         * @var     string (default: 'payouts')
          */
         protected $_directory = 'payouts';
 
@@ -26,7 +26,7 @@
          * paid
          * 
          * @access  public
-         * @param   integer $id
+         * @param   int $id
          * @return  false|array|stdClass
          */
         public function paid($id)

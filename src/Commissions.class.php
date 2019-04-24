@@ -17,8 +17,8 @@
         /**
          * _directory
          * 
-         * @var     string (default: 'commissions')
          * @access  protected
+         * @var     string (default: 'commissions')
          */
         protected $_directory = 'commissions';
 
@@ -26,7 +26,7 @@
          * approve
          * 
          * @access  public
-         * @param   integer $id
+         * @param   int $id
          * @return  false|stdClass|array
          */
         public function approve($id)
@@ -60,7 +60,7 @@
          * disapprove
          * 
          * @access  public
-         * @param   integer $id
+         * @param   int $id
          * @return  false|stdClass|array
          */
         public function disapprove($id)
