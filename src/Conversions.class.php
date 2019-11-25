@@ -2,17 +2,17 @@
 
     // Namespace and dependencies
     namespace Tapfiliate;
-    require_once 'Api.class.php';
+    require_once 'API.class.php';
 
     /**
      * Conversions
      * 
      * @author  Oliver Nassar <onassar@gmail.com>
      * @see     https://github.com/onassar/PHP-Tapfiliate
-     * @extends Api
+     * @extends API
      * @final
      */
-    final class Conversions extends Api
+    final class Conversions extends API
     {
         /**
          * _directory

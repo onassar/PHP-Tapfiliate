@@ -4,14 +4,14 @@
     namespace Tapfiliate;
 
     /**
-     * Api
+     * API
      * 
      * @link    https://github.com/onassar/PHP-Tapfiliate
      * @link    https://pecl.php.net/package/oauth
      * @link    http://php.net/manual/en/book.oauth.php
      * @author  Oliver Nassar <onassar@gmail.com>
      */
-    class Api
+    class API
     {
         /**
          * _base
@@ -225,7 +225,7 @@
          * @param   bool $recursive (default: false)
          * @return  false|array|stdClass
          */
-        public function _request(
+        protected function _request(
             $method,
             $path,
             array $data = array(),
