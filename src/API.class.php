@@ -17,9 +17,9 @@
          * _base
          * 
          * @access  protected
-         * @var     string (default: 'https://tapfiliate.com/api/1.4/')
+         * @var     string (default: 'https://api.tapfiliate.com/1.4/')
          */
-        protected $_base = 'https://tapfiliate.com/api/1.4/';
+        protected $_base = 'https://api.tapfiliate.com/1.4/';
 
         /**
          * _directory
