@@ -78,7 +78,7 @@
         {
             foreach ($headers as $header) {
                 if (strstr($header, 'rel="next"') !== false) {
-                    $pattern = '/(https:\/\/.+)>; rel="next/';
+                    $pattern = '/(https?:\/\/.+)>; rel="next/';
                     preg_match($pattern, $header, $matches);
                     $link = array_pop($matches);
                     return $link;
