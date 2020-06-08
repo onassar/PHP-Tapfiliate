@@ -23,16 +23,37 @@
         protected $_directory = 'commissions';
 
         /**
+         * _validateCommissionCreateAttempt
+         * 
+         * @throws  \Exception
+         * @access  protected
+         * @param   array $data
+         * @return  void
+         */
+        protected function _validateCommissionCreateAttempt(array $data): void
+        {
+            if (isset($data['conversion_id']) === false) {
+                $msg = 'conversion_id must be specified';
+                throw new \Exception($msg);
+            }
+            if (isset($data['sub_amount']) === false) {
+                $msg = 'sub_amount must be specified';
+                throw new \Exception($msg);
+            }
+        }
+
+        /**
          * approve
          * 
          * @access  public
          * @param   int $id
          * @return  false|stdClass|array
          */
-        public function approve($id)
+        public function approve(int $id)
         {
-            $path = 'commissions/' . ($id) . '/approval/';
-            return $this->_put($path);
+            $endpoint = 'commissions/' . ($id) . '/approval/';
+            $response = $this->_put($endpoint);
+            return $response;
         }
 
         /**
@@ -44,16 +65,13 @@
          */
         public function create(array $data = array())
         {
-            if (isset($data['conversion_id']) === false) {
-                throw new \Exception('conversion_id must be specified');
-            }
-            if (isset($data['sub_amount']) === false) {
-                throw new \Exception('sub_amount must be specified');
-            }
+            $this->_validateCommissionCreateAttempt($data);
             $conversion_id = $data['conversion_id'];
             unset($data['conversion_id']);
-            $path = 'conversions/' . ($conversion_id) . '/commissions/';
-            return $this->_post($path, array(), array($data));
+            $endpoint = 'conversions/' . ($conversion_id) . '/commissions/';
+            $params = array();
+            $response = $this->_post($endpoint, $params, array($data));
+            return $response;
         }
 
         /**
@@ -63,9 +81,10 @@
          * @param   int $id
          * @return  false|stdClass|array
          */
-        public function disapprove($id)
+        public function disapprove(int $id)
         {
-            $path = 'commissions/' . ($id) . '/approval/';
-            return $this->_delete($path);
+            $endpoint = 'commissions/' . ($id) . '/approval/';
+            $response = $this->_delete($endpoint);
+            return $response;
         }
     }

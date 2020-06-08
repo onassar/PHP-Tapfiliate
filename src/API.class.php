@@ -69,7 +69,7 @@
         /**
          * _getNextPageLink
          * 
-         * @throws  Exception
+         * @throws  \Exception
          * @access  protected
          * @param   array $headers
          * @return  string
@@ -85,7 +85,7 @@
                 }
             }
             $msg = 'Could not find next page link';
-            throw new Exception($msg);
+            throw new \Exception($msg);
         }
 
         /**
@@ -118,16 +118,13 @@
             if ($recursive === true) {
                 if ($this->_isMore($http_response_header) === true) {
                     $link = $this->_getNextPageLink($http_response_header);
-                    $recursiveResponse = $this->_attempt($link, $context);
+                    $recursiveResponse = $this->_attempt($link, $context, $recursive);
                     if ($recursiveResponse !== false) {
                         $decodedRecursiveResponse = json_decode(
                             $recursiveResponse['content'],
                             true
                         );
-                        $decodedResponse = json_decode(
-                            $response,
-                            true
-                        );
+                        $decodedResponse = json_decode($response, true);
                         $mergedResponse = array_merge(
                             $decodedResponse,
                             $decodedRecursiveResponse
@@ -146,73 +143,79 @@
          * _delete
          * 
          * @access  protected
-         * @param   string $path
+         * @param   string $endpoint
          * @return  false|array|stdClass
          */
-        protected function _delete($path)
+        protected function _delete(string $endpoint)
         {
-            return $this->_request('delete', $path);
+            $method = 'delete';
+            $response = $this->_request($method, $endpoint);
+            return $response;
         }
 
         /**
          * _get
          * 
          * @access  protected
-         * @param   string $path
+         * @param   string $endpoint
          * @param   array $params (default: array())
          * @return  false|array|stdClass
          */
-        protected function _get($path, array $params = array())
+        protected function _get(string $endpoint, array $params = array())
         {
+            $method = 'get';
             $recursive = false;
             if (isset($params['recursive']) === true) {
                 $recursive = $params['recursive'] === true;
                 unset($params['recursive']);
             }
             if (empty($params) === false) {
-                $path = ($path) . '?' . http_build_query($params);
+                $queryString = http_build_query($params);
+                $endpoint = ($endpoint) . '?' . ($queryString);
             }
-            return $this->_request('get', $path, array(), $recursive);
+            $data = array();
+            $response = $this->_request($method, $endpoint, $data, $recursive);
+            return $response;
         }
 
         /**
          * _post
          * 
          * @access  protected
-         * @param   string $path
+         * @param   string $endpoint
          * @param   array $params (default: array())
          * @param   array $data (default: array())
          * @return  false|array|stdClass
          */
-        protected function _post(
-            $path,
-            array $params = array(),
-            array $data = array()
-        ) {
+        protected function _post(string $endpoint, array $params = array(), array $data = array())
+        {
+            $method = 'post';
             if (empty($params) === false) {
-                $path = ($path) . '?' . http_build_query($params);
+                $queryString = http_build_query($params);
+                $endpoint = ($endpoint) . '?' . ($queryString);
             }
-            return $this->_request('post', $path, $data);
+            $response = $this->_request($method, $endpoint, $data);
+            return $response;
         }
 
         /**
          * _put
          * 
          * @access  protected
-         * @param   string $path
+         * @param   string $endpoint
          * @param   array $params (default: array())
          * @param   array $data (default: array())
          * @return  false|array|stdClass
          */
-        protected function _put(
-            $path,
-            array $params = array(),
-            array $data = array()
-        ) {
+        protected function _put(string $endpoint, array $params = array(), array $data = array())
+        {
+            $method = 'put';
             if (empty($params) === false) {
-                $path = ($path) . '?' . http_build_query($params);
+                $queryString = http_build_query($params);
+                $endpoint = ($endpoint) . '?' . ($queryString);
             }
-            return $this->_request('put', $path, $data);
+            $response = $this->_request($method, $endpoint, $data);
+            return $response;
         }
 
         /**
@@ -220,17 +223,13 @@
          * 
          * @access  protected
          * @param   string $method
-         * @param   string $path
+         * @param   string $endpoint
          * @param   array $data (default: array())
          * @param   bool $recursive (default: false)
          * @return  false|array|stdClass
          */
-        protected function _request(
-            $method,
-            $path,
-            array $data = array(),
-            $recursive = false
-        ) {
+        protected function _request(string $method, string $endpoint, array $data = array(), bool $recursive = false)
+        {
             $key = $this->_tapfiliate->getKey();
             $options = array(
                 'http' => array(
@@ -244,7 +243,7 @@
                     ($contentType);
                 $options['http']['content'] = json_encode($data);
             }
-            $url = ($this->_base) . ($path);
+            $url = ($this->_base) . ($endpoint);
             $context = stream_context_create($options);
             $response = $this->_attempt($url, $context, $recursive);
             if ($response['success'] === false) {
@@ -269,22 +268,28 @@
          */
         public function all(array $params = array())
         {
-            $path = ($this->_directory) . '/';
-            return $this->_get($path, $params);
+            $directory = $this->_directory;
+            $endpoint = ($directory) . '/';
+            $response = $this->_get($endpoint, $params);
+            return $response;
         }
 
         /**
          * create
          * 
+         * @throws  \Exception
          * @access  public
          * @param   array $data (default: array())
          * @return  false|array|stdClass
          */
         public function create(array $data = array())
         {
-            throw new \Exception('Not yet implemented');
-            $path = ($this->_directory) . '/';
-            return $this->_post($path, $data);
+            $msg = 'Not yet implemented';
+            throw new \Exception($msg);
+            // $directory = $this->_directory;
+            // $endpoint = ($directory) . '/';
+            // $response = $this->_post($endpoint, $data);
+            // return $response;
         }
 
         /**
@@ -294,10 +299,12 @@
          * @param   int $id
          * @return  false|array|stdClass
          */
-        public function delete($id)
+        public function delete(int $id)
         {
-            $path = ($this->_directory) . '/' . ($id) . '/';
-            return $this->_delete($path);
+            $directory = $this->_directory;
+            $endpoint = ($directory) . '/' . ($id) . '/';
+            $response = $this->_delete($endpoint);
+            return $response;
         }
 
         /**
@@ -307,10 +314,12 @@
          * @param   int $id
          * @return  false|array|stdClass
          */
-        public function get($id)
+        public function get(int $id)
         {
-            $path = ($this->_directory) . '/' . ($id) . '/';
-            return $this->_get($path);
+            $directory = $this->_directory;
+            $endpoint = ($directory) . '/' . ($id) . '/';
+            $response = $this->_get($endpoint);
+            return $response;
         }
 
         /**
@@ -321,9 +330,12 @@
          * @param   array $attributes
          * @return  false|array|stdClass
          */
-        public function put($id, array $attributes)
+        public function put(int $id, array $attributes)
         {
-            $path = ($this->_directory) . '/' . ($id) . '/';
-            return $this->_put($path, array(), $attributes);
+            $directory = $this->_directory;
+            $endpoint = ($directory) . '/' . ($id) . '/';
+            $params = array();
+            $response = $this->_put($endpoint, $params, $attributes);
+            return $response;
         }
     }
