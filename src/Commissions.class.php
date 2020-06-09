@@ -46,10 +46,10 @@
          * approve
          * 
          * @access  public
-         * @param   int $id
+         * @param   string $id
          * @return  false|stdClass|array
          */
-        public function approve(int $id)
+        public function approve(string $id)
         {
             $endpoint = 'commissions/' . ($id) . '/approval/';
             $response = $this->_put($endpoint);
@@ -78,10 +78,10 @@
          * disapprove
          * 
          * @access  public
-         * @param   int $id
+         * @param   string $id
          * @return  false|stdClass|array
          */
-        public function disapprove(int $id)
+        public function disapprove(string $id)
         {
             $endpoint = 'commissions/' . ($id) . '/approval/';
             $response = $this->_delete($endpoint);
