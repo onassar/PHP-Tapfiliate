@@ -296,10 +296,10 @@
          * delete
          * 
          * @access  public
-         * @param   int $id
+         * @param   string $id
          * @return  false|array|stdClass
          */
-        public function delete(int $id)
+        public function delete(string $id)
         {
             $directory = $this->_directory;
             $endpoint = ($directory) . '/' . ($id) . '/';
@@ -311,10 +311,10 @@
          * get
          * 
          * @access  public
-         * @param   int $id
+         * @param   string $id
          * @return  false|array|stdClass
          */
-        public function get(int $id)
+        public function get(string $id)
         {
             $directory = $this->_directory;
             $endpoint = ($directory) . '/' . ($id) . '/';
@@ -326,11 +326,11 @@
          * put
          * 
          * @access  public
-         * @param   int $id
+         * @param   string $id
          * @param   array $attributes
          * @return  false|array|stdClass
          */
-        public function put(int $id, array $attributes)
+        public function put(string $id, array $attributes)
         {
             $directory = $this->_directory;
             $endpoint = ($directory) . '/' . ($id) . '/';
