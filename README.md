@@ -1,13 +1,15 @@
 # PHP-Tapfiliate
+Factory based PHP wrapper for the Tapfiliate API.
 
-Simple PHP wrapper for the Tapfiliate API
+### Note
+Requires
+[PHP-RemoteRequests](https://github.com/onassar/PHP-RemoteRequests).
 
-### Sample Usage
-
+### Sample Calls
 ``` php
-require_once '/path/to/Tapfiliate.class.php';
+require_once '/path/to/Factory.class.php';
 $key  = '*****';
-$tapfiliate = new Tapfiliate($key);
+$tapfiliate = new onassar\Tapfiliate\Factory($key);
 $programs = $tapfiliate->programs()->all();
 $conversion = $tapfiliate->conversions()->get(123);
 exit(0);

@@ -4,20 +4,22 @@
     namespace onassar\Tapfiliate;
 
     /**
-     * Affiliates
+     * Programs
      * 
      * @author  Oliver Nassar <onassar@gmail.com>
      * @link    https://github.com/onassar/PHP-Tapfiliate
      * @extends Base
      * @final
      */
-    final class Affiliates extends Base
+    final class Programs extends Base
     {
         /**
-         * _directory
+         * _paths
          * 
          * @access  protected
-         * @var     string (default: 'affiliates')
+         * @var     array
          */
-        protected $_directory = 'affiliates';
+        protected $_paths = array(
+            'all' => '/1.6/programs/'
+        );
     }

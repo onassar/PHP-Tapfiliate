@@ -1,52 +1,52 @@
 <?php
 
-    // Namespace and dependencies
-    namespace Tapfiliate;
+    // Namespace overhead
+    namespace onassar\Tapfiliate;
 
     /**
-     * API
+     * Base
      * 
+     * @author  Oliver Nassar <onassar@gmail.com>
      * @link    https://github.com/onassar/PHP-Tapfiliate
      * @link    https://pecl.php.net/package/oauth
      * @link    http://php.net/manual/en/book.oauth.php
-     * @author  Oliver Nassar <onassar@gmail.com>
      */
-    class API
+    class Base
     {
         /**
          * _base
          * 
          * @access  protected
-         * @var     string (default: 'https://api.tapfiliate.com/1.4/')
+         * @var     string (default: 'https://api.tapfiliate.com/1.6/')
          */
-        protected $_base = 'https://api.tapfiliate.com/1.4/';
+        protected $_base = 'https://api.tapfiliate.com/1.6/';
 
         /**
          * _directory
          * 
          * @access  protected
-         * @var     false|string (default: false)
+         * @var     null|string (default: null)
          */
-        protected $_directory = false;
+        protected $_directory = null;
 
         /**
-         * _tapfiliate
+         * _factory
          * 
          * @access  protected
-         * @var     Tapfiliate
+         * @var     null|Factory (default: null)
          */
-        protected $_tapfiliate;
+        protected $_factory = null;
 
         /**
          * __construct
          * 
          * @access  public
-         * @param   Tapfiliate $tapfiliate
+         * @param   Factory $factory
          * @return  void
          */
-        public function __construct(Tapfiliate $tapfiliate)
+        public function __construct(Factory $factory)
         {
-            $this->_tapfiliate = $tapfiliate;
+            $this->_factory = $factory;
         }
 
         /**
@@ -104,6 +104,10 @@
         {
             set_error_handler(function() {});
             $response = file_get_contents($url, false, $context);
+el('hi');
+el($url);
+el(pr($context, true));
+el(pr($response, true));
             restore_error_handler();
             if ($response === false) {
                 $response = array();
@@ -144,7 +148,7 @@
          * 
          * @access  protected
          * @param   string $endpoint
-         * @return  false|array|stdClass
+         * @return  false|array
          */
         protected function _delete(string $endpoint)
         {
@@ -159,7 +163,7 @@
          * @access  protected
          * @param   string $endpoint
          * @param   array $params (default: array())
-         * @return  false|array|stdClass
+         * @return  false|array
          */
         protected function _get(string $endpoint, array $params = array())
         {
@@ -175,6 +179,7 @@
             }
             $data = array();
             $response = $this->_request($method, $endpoint, $data, $recursive);
+el(pr($response, true));
             return $response;
         }
 
@@ -185,7 +190,7 @@
          * @param   string $endpoint
          * @param   array $params (default: array())
          * @param   array $data (default: array())
-         * @return  false|array|stdClass
+         * @return  false|array
          */
         protected function _post(string $endpoint, array $params = array(), array $data = array())
         {
@@ -205,7 +210,7 @@
          * @param   string $endpoint
          * @param   array $params (default: array())
          * @param   array $data (default: array())
-         * @return  false|array|stdClass
+         * @return  false|array
          */
         protected function _put(string $endpoint, array $params = array(), array $data = array())
         {
@@ -226,11 +231,11 @@
          * @param   string $endpoint
          * @param   array $data (default: array())
          * @param   bool $recursive (default: false)
-         * @return  false|array|stdClass
+         * @return  false|array
          */
         protected function _request(string $method, string $endpoint, array $data = array(), bool $recursive = false)
         {
-            $key = $this->_tapfiliate->getKey();
+            $key = $this->_factory->getKey();
             $options = array(
                 'http' => array(
                     'method' => strtoupper($method),
@@ -246,8 +251,10 @@
             $url = ($this->_base) . ($endpoint);
             $context = stream_context_create($options);
             $response = $this->_attempt($url, $context, $recursive);
+el($url);
+el(pr($response, true));
             if ($response['success'] === false) {
-                if ($this->_tapfiliate->debug() === true) {
+                if ($this->_factory->debug() === true) {
                     echo '<pre>';
                     print_r($response);
                     echo '</pre>';
@@ -255,8 +262,7 @@
                 }
                 return false;
             }
-            $associative = $this->_tapfiliate->associative();
-            return json_decode($response['content'], $associative);
+            return json_decode($response['content'], true);
         }
 
         /**
@@ -264,32 +270,15 @@
          * 
          * @access  public
          * @param   array $params (default: array())
-         * @return  false|array|stdClass
+         * @return  false|array
          */
         public function all(array $params = array())
         {
             $directory = $this->_directory;
             $endpoint = ($directory) . '/';
+el($endpoint);
             $response = $this->_get($endpoint, $params);
             return $response;
-        }
-
-        /**
-         * create
-         * 
-         * @throws  \Exception
-         * @access  public
-         * @param   array $data (default: array())
-         * @return  false|array|stdClass
-         */
-        public function create(array $data = array())
-        {
-            $msg = 'Not yet implemented';
-            throw new \Exception($msg);
-            // $directory = $this->_directory;
-            // $endpoint = ($directory) . '/';
-            // $response = $this->_post($endpoint, $data);
-            // return $response;
         }
 
         /**
@@ -297,7 +286,7 @@
          * 
          * @access  public
          * @param   string $id
-         * @return  false|array|stdClass
+         * @return  false|array
          */
         public function delete(string $id)
         {
@@ -312,7 +301,7 @@
          * 
          * @access  public
          * @param   string $id
-         * @return  false|array|stdClass
+         * @return  false|array
          */
         public function get(string $id)
         {
@@ -328,7 +317,7 @@
          * @access  public
          * @param   string $id
          * @param   array $attributes
-         * @return  false|array|stdClass
+         * @return  false|array
          */
         public function put(string $id, array $attributes)
         {

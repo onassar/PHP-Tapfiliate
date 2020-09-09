@@ -14,12 +14,14 @@
     final class Commissions extends Base
     {
         /**
-         * _directory
+         * _paths
          * 
          * @access  protected
-         * @var     string (default: 'commissions')
+         * @var     array
          */
-        protected $_directory = 'commissions';
+        protected $_paths = array(
+            'all' => '/1.6/commissions/'
+        );
 
         /**
          * _validateCommissionCreateAttempt
@@ -50,8 +52,8 @@
          */
         public function approve(string $id)
         {
-            $endpoint = 'commissions/' . ($id) . '/approved/';
-            $response = $this->_put($endpoint);
+            $path = 'commissions/' . ($id) . '/approved/';
+            $response = $this->_put($path);
             return $response;
         }
 
@@ -67,9 +69,9 @@
             $this->_validateCommissionCreateAttempt($data);
             $conversion_id = $data['conversion_id'];
             unset($data['conversion_id']);
-            $endpoint = 'conversions/' . ($conversion_id) . '/commissions/';
+            $path = 'conversions/' . ($conversion_id) . '/commissions/';
             $params = array();
-            $response = $this->_post($endpoint, $params, array($data));
+            $response = $this->_post($path, $params, array($data));
             return $response;
         }
 
@@ -82,8 +84,8 @@
          */
         public function disapprove(string $id)
         {
-            $endpoint = 'commissions/' . ($id) . '/approved/';
-            $response = $this->_delete($endpoint);
+            $path = 'commissions/' . ($id) . '/approved/';
+            $response = $this->_delete($path);
             return $response;
         }
     }

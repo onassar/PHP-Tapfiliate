@@ -14,10 +14,12 @@
     final class Affiliates extends Base
     {
         /**
-         * _directory
+         * _paths
          * 
          * @access  protected
-         * @var     string (default: 'affiliates')
+         * @var     array
          */
-        protected $_directory = 'affiliates';
+        protected $_paths = array(
+            'all' => '/1.6/affiliates/'
+        );
     }
