@@ -272,6 +272,7 @@
             $url = 'https://' . ($host) . ($path);
             $this->setRequestMethod('put');
             $this->setURL($url);
+el(pr($properties, true));
 prx($properties);
             $response = $this->_getURLResponse() ?? false;
             if ($response === false) {

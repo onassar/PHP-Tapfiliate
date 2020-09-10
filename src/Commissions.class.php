@@ -88,6 +88,7 @@
             $url = 'https://' . ($host) . ($path);
             $this->setRequestMethod('post');
             $this->setURL($url);
+el(pr($properties, true));
 prx($properties);
             $response = $this->_getURLResponse() ?? null;
             return $response;
