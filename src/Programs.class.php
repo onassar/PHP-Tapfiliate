@@ -14,10 +14,12 @@
     final class Programs extends Base
     {
         /**
-         * _directory
+         * _paths
          * 
          * @access  protected
-         * @var     string (default: 'programs')
+         * @var     array
          */
-        protected $_directory = 'programs';
+        protected $_paths = array(
+            'find' => '/1.6/programs/'
+        );
     }

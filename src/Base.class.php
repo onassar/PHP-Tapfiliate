@@ -2,32 +2,22 @@
 
     // Namespace overhead
     namespace onassar\Tapfiliate;
+    use onassar\RemoteRequests;
 
     /**
      * Base
      * 
      * @author  Oliver Nassar <onassar@gmail.com>
      * @link    https://github.com/onassar/PHP-Tapfiliate
-     * @link    https://pecl.php.net/package/oauth
-     * @link    http://php.net/manual/en/book.oauth.php
+     * @extends RemoteRequests\Base
      */
-    class Base
+    class Base extends RemoteRequests\Base
     {
         /**
-         * _base
+         * Traits
          * 
-         * @access  protected
-         * @var     string (default: 'https://api.tapfiliate.com/1.6/')
          */
-        protected $_base = 'https://api.tapfiliate.com/1.6/';
-
-        /**
-         * _directory
-         * 
-         * @access  protected
-         * @var     null|string (default: null)
-         */
-        protected $_directory = null;
+        use RemoteRequests\RateLimits;
 
         /**
          * _factory
@@ -36,6 +26,22 @@
          * @var     null|Factory (default: null)
          */
         protected $_factory = null;
+
+        /**
+         * _host
+         * 
+         * @access  protected
+         * @var     string (default: 'api.tapfiliate.com')
+         */
+        protected $_host = 'api.tapfiliate.com';
+
+        /**
+         * _maxAttempts
+         * 
+         * @access  protected
+         * @var     int (default: 1)
+         */
+        protected $_maxAttempts = 1;
 
         /**
          * __construct
@@ -47,17 +53,117 @@
         public function __construct(Factory $factory)
         {
             $this->_factory = $factory;
+            $this->setExpectedResponseContentType('application/json');
         }
 
         /**
-         * _isMore
+         * _getAuthorizationHeader
          * 
          * @access  protected
-         * @param   array $headers
+         * @return  string
+         */
+        protected function _getAuthorizationHeader(): string
+        {
+            $factory = $this->_factory;
+            $key = $factory->getKey();
+            $header = 'Api-Key: ' . ($key);
+            return $header;
+        }
+
+        /**
+         * _getCURLRequestHeaders
+         * 
+         * @access  protected
+         * @return  array
+         */
+        protected function _getCURLRequestHeaders(): array
+        {
+            $headers = parent::_getCURLRequestHeaders();
+            $header = $this->_getAuthorizationHeader();
+            array_push($headers, $header);
+            return $headers;
+        }
+
+        /**
+         * _getFindPage
+         * 
+         * @access  protected
+         * @return  int
+         */
+        protected function _getFindPage(): int
+        {
+            $page = 1;
+            $more = $this->_moreFindResults();
+            if ($more === false) {
+                return $page;
+            }
+            $page = $this->_getHeaderBasedFindPage();
+            return $page;
+        }
+
+
+        /**
+         * _getHeaderBasedFindPage
+         * 
+         * @throws  \Exception
+         * @access  protected
+         * @return  int
+         */
+        protected function _getHeaderBasedFindPage(): int
+        {
+            $headers = $this->_lastRemoteRequestHeaders;
+            foreach ($headers as $header) {
+                if (strstr($header, 'rel="next"') === false) {
+                    continue;
+                }
+                $pattern = '/(https?:\/\/.+)>; rel="next/';
+                preg_match($pattern, $header, $matches);
+                $link = array_pop($matches);
+                $pattern = '/page=([0-9]+)/';
+                preg_match($pattern, $link, $matches);
+                $page = array_pop($matches);
+                return $page;
+            }
+            $msg = 'Could not find next page link';
+            throw new \Exception($msg);
+        }
+
+        /**
+         * _getPaginationRequestData
+         * 
+         * @access  protected
+         * @return  array
+         */
+        protected function _getPaginationRequestData(): array
+        {
+            $page = $this->_getFindPage();
+            $paginationRequestData = compact('page');
+            return $paginationRequestData;
+        }
+
+        /**
+         * _getRequestStreamContextOptions
+         * 
+         * @access  protected
+         * @return  array
+         */
+        protected function _getRequestStreamContextOptions(): array
+        {
+            $options = parent::_getRequestStreamContextOptions();
+            $header = $this->_getAuthorizationHeader();
+            $options['http']['header'] = $header;
+            return $options;
+        }
+
+        /**
+         * _moreFindResults
+         * 
+         * @access  protected
          * @return  bool
          */
-        protected function _isMore(array $headers)
+        protected function _moreFindResults()
         {
+            $headers = $this->_lastRemoteRequestHeaders;
             foreach ($headers as $header) {
                 if (strstr($header, 'rel="next"') !== false) {
                     return true;
@@ -67,218 +173,15 @@
         }
 
         /**
-         * _getNextPageLink
-         * 
-         * @throws  \Exception
-         * @access  protected
-         * @param   array $headers
-         * @return  string
-         */
-        protected function _getNextPageLink(array $headers)
-        {
-            foreach ($headers as $header) {
-                if (strstr($header, 'rel="next"') !== false) {
-                    $pattern = '/(https?:\/\/.+)>; rel="next/';
-                    preg_match($pattern, $header, $matches);
-                    $link = array_pop($matches);
-                    return $link;
-                }
-            }
-            $msg = 'Could not find next page link';
-            throw new \Exception($msg);
-        }
-
-        /**
-         * _attempt
-         * 
-         * Attempts to call the endpoint, ensuring that no native error handling
-         * can intercept a failed request.
+         * _setFindPaginationRequestData
          * 
          * @access  protected
-         * @param   string $url
-         * @param   resource $context
-         * @param   bool $recursive (default: false)
-         * @return  array
+         * @return  void
          */
-        protected function _attempt($url, $context, $recursive = false)
+        protected function _setFindPaginationRequestData(): void
         {
-            set_error_handler(function() {});
-            $response = file_get_contents($url, false, $context);
-el('hi');
-el($url);
-el(pr($context, true));
-el(pr($response, true));
-            restore_error_handler();
-            if ($response === false) {
-                $response = array();
-                if (isset($http_response_header) === true) {
-                    $response = $http_response_header;
-                }
-                return array(
-                    'success' => false,
-                    'response' => $response
-                );
-            }
-            if ($recursive === true) {
-                if ($this->_isMore($http_response_header) === true) {
-                    $link = $this->_getNextPageLink($http_response_header);
-                    $recursiveResponse = $this->_attempt($link, $context, $recursive);
-                    if ($recursiveResponse !== false) {
-                        $decodedRecursiveResponse = json_decode(
-                            $recursiveResponse['content'],
-                            true
-                        );
-                        $decodedResponse = json_decode($response, true);
-                        $mergedResponse = array_merge(
-                            $decodedResponse,
-                            $decodedRecursiveResponse
-                        );
-                        $response = json_encode($mergedResponse);
-                    }
-                }
-            }
-            return array(
-                'success' => true,
-                'content' => $response
-            );
-        }
-
-        /**
-         * _delete
-         * 
-         * @access  protected
-         * @param   string $endpoint
-         * @return  false|array
-         */
-        protected function _delete(string $endpoint)
-        {
-            $method = 'delete';
-            $response = $this->_request($method, $endpoint);
-            return $response;
-        }
-
-        /**
-         * _get
-         * 
-         * @access  protected
-         * @param   string $endpoint
-         * @param   array $params (default: array())
-         * @return  false|array
-         */
-        protected function _get(string $endpoint, array $params = array())
-        {
-            $method = 'get';
-            $recursive = false;
-            if (isset($params['recursive']) === true) {
-                $recursive = $params['recursive'] === true;
-                unset($params['recursive']);
-            }
-            if (empty($params) === false) {
-                $queryString = http_build_query($params);
-                $endpoint = ($endpoint) . '?' . ($queryString);
-            }
-            $data = array();
-            $response = $this->_request($method, $endpoint, $data, $recursive);
-el(pr($response, true));
-            return $response;
-        }
-
-        /**
-         * _post
-         * 
-         * @access  protected
-         * @param   string $endpoint
-         * @param   array $params (default: array())
-         * @param   array $data (default: array())
-         * @return  false|array
-         */
-        protected function _post(string $endpoint, array $params = array(), array $data = array())
-        {
-            $method = 'post';
-            if (empty($params) === false) {
-                $queryString = http_build_query($params);
-                $endpoint = ($endpoint) . '?' . ($queryString);
-            }
-            $response = $this->_request($method, $endpoint, $data);
-            return $response;
-        }
-
-        /**
-         * _put
-         * 
-         * @access  protected
-         * @param   string $endpoint
-         * @param   array $params (default: array())
-         * @param   array $data (default: array())
-         * @return  false|array
-         */
-        protected function _put(string $endpoint, array $params = array(), array $data = array())
-        {
-            $method = 'put';
-            if (empty($params) === false) {
-                $queryString = http_build_query($params);
-                $endpoint = ($endpoint) . '?' . ($queryString);
-            }
-            $response = $this->_request($method, $endpoint, $data);
-            return $response;
-        }
-
-        /**
-         * _request
-         * 
-         * @access  protected
-         * @param   string $method
-         * @param   string $endpoint
-         * @param   array $data (default: array())
-         * @param   bool $recursive (default: false)
-         * @return  false|array
-         */
-        protected function _request(string $method, string $endpoint, array $data = array(), bool $recursive = false)
-        {
-            $key = $this->_factory->getKey();
-            $options = array(
-                'http' => array(
-                    'method' => strtoupper($method),
-                    'header' => 'Api-Key: ' . ($key)
-                )
-            );
-            if (empty($data) === false) {
-                $contentType = 'application/json';
-                $options['http']['header'] .= "\r\nContent-type: " .
-                    ($contentType);
-                $options['http']['content'] = json_encode($data);
-            }
-            $url = ($this->_base) . ($endpoint);
-            $context = stream_context_create($options);
-            $response = $this->_attempt($url, $context, $recursive);
-el($url);
-el(pr($response, true));
-            if ($response['success'] === false) {
-                if ($this->_factory->debug() === true) {
-                    echo '<pre>';
-                    print_r($response);
-                    echo '</pre>';
-                    exit(0);
-                }
-                return false;
-            }
-            return json_decode($response['content'], true);
-        }
-
-        /**
-         * all
-         * 
-         * @access  public
-         * @param   array $params (default: array())
-         * @return  false|array
-         */
-        public function all(array $params = array())
-        {
-            $directory = $this->_directory;
-            $endpoint = ($directory) . '/';
-el($endpoint);
-            $response = $this->_get($endpoint, $params);
-            return $response;
+            $paginationRequestData = $this->_getPaginationRequestData();
+            $this->mergeRequestData($paginationRequestData);
         }
 
         /**
@@ -286,14 +189,53 @@ el($endpoint);
          * 
          * @access  public
          * @param   string $id
-         * @return  false|array
+         * @return  bool
          */
-        public function delete(string $id)
+        public function delete(string $id): bool
         {
-            $directory = $this->_directory;
-            $endpoint = ($directory) . '/' . ($id) . '/';
-            $response = $this->_delete($endpoint);
-            return $response;
+            $host = $this->_host;
+            $path = $this->_paths['delete'];
+            $path = str_replace(':id', $id, $path);
+            $url = 'https://' . ($host) . ($path);
+            $this->setRequestMethod('delete');
+            $this->setURL($url);
+            $response = $this->_getURLResponse() ?? false;
+            if ($response === false) {
+                return false;
+            }
+            return true;
+        }
+
+        /**
+         * find
+         * 
+         * @access  public
+         * @param   array $params (default: array())
+         * @param   bool $recursive (default: true)
+         * @param   array $recursiveResults (default: array())
+         * @return  array
+         */
+        public function find(array $params = array(), bool $recursive = true, array $recursiveResults = array()): array
+        {
+            $host = $this->_host;
+            $path = $this->_paths['find'];
+            $url = 'https://' . ($host) . ($path);
+            $this->setRequestData($params);
+            $this->setURL($url);
+            $this->_setFindPaginationRequestData();
+            $results = $this->_getURLResponse() ?? array();
+            if ($recursive === false) {
+                return $results;
+            }
+            $recursiveResults = array_merge($recursiveResults, $results);
+            $page = $this->_getFindPage();
+// if ($page === 4) {
+//     prx($recursiveResults);
+// }
+            if ($page === 1) {
+                return $recursiveResults;
+            }
+            return $this->find($params, $recursive, $recursiveResults);
         }
 
         /**
@@ -301,14 +243,17 @@ el($endpoint);
          * 
          * @access  public
          * @param   string $id
-         * @return  false|array
+         * @return  null|array
          */
-        public function get(string $id)
+        public function getTemp(string $id): ?array
         {
-            $directory = $this->_directory;
-            $endpoint = ($directory) . '/' . ($id) . '/';
-            $response = $this->_get($endpoint);
-            return $response;
+            $host = $this->_host;
+            $path = $this->_paths['get'];
+            $path = str_replace(':id', $id, $path);
+            $url = 'https://' . ($host) . ($path);
+            $this->setURL($url);
+            $result = $this->_getURLResponse();
+            return $result;
         }
 
         /**
@@ -316,15 +261,22 @@ el($endpoint);
          * 
          * @access  public
          * @param   string $id
-         * @param   array $attributes
-         * @return  false|array
+         * @param   array $properties
+         * @return  bool
          */
-        public function put(string $id, array $attributes)
+        public function put(string $id, array $properties): bool
         {
-            $directory = $this->_directory;
-            $endpoint = ($directory) . '/' . ($id) . '/';
-            $params = array();
-            $response = $this->_put($endpoint, $params, $attributes);
-            return $response;
+            $host = $this->_host;
+            $path = $this->_paths['put'];
+            $path = str_replace(':id', $id, $path);
+            $url = 'https://' . ($host) . ($path);
+            $this->setRequestMethod('put');
+            $this->setURL($url);
+prx($properties);
+            $response = $this->_getURLResponse() ?? false;
+            if ($response === false) {
+                return false;
+            }
+            return true;
         }
     }

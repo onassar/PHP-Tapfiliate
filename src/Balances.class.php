@@ -14,10 +14,12 @@
     final class Balances extends Base
     {
         /**
-         * _directory
+         * _paths
          * 
          * @access  protected
-         * @var     string (default: 'balances')
+         * @var     array
          */
-        protected $_directory = 'balances';
+        protected $_paths = array(
+            'find' => '/1.6/balances/'
+        );
     }

@@ -6,8 +6,7 @@
     /**
      * Factory
      * 
-     * Operates as a factory for returning Tapfiliate clients. Those clients use
-     * PECL OAuth for requests.
+     * Operates as a factory for returning Tapfiliate clients.
      * 
      * @author  Oliver Nassar <onassar@gmail.com>
      * @link    https://github.com/onassar/PHP-Tapfiliate
@@ -23,14 +22,6 @@
         protected $_clients = array();
 
         /**
-         * _debug
-         * 
-         * @access  protected
-         * @var     bool (default: false)
-         */
-        protected $_debug = false;
-
-        /**
          * _key
          * 
          * @access  protected
@@ -43,13 +34,11 @@
          * 
          * @access  public
          * @param   string $key
-         * @param   bool $debug (default: false)
          * @return  void
          */
-        public function __construct(string $key, bool $debug = false)
+        public function __construct(string $key)
         {
             $this->_key = $key;
-            $this->_debug = $debug;
         }
 
         /**
@@ -89,18 +78,6 @@
             $this->_clients['commissions'] = $this->_clients['commissions'] ?? new Commissions($this);
             $client = $this->_clients['commissions'];
             return $client;
-        }
-
-        /**
-         * debug
-         * 
-         * @access  public
-         * @return  bool
-         */
-        public function debug(): bool
-        {
-            $debug = $this->_debug;
-            return $debug;
         }
 
         /**

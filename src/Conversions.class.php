@@ -14,10 +14,14 @@
     final class Conversions extends Base
     {
         /**
-         * _directory
+         * _paths
          * 
          * @access  protected
-         * @var     string (default: 'conversions')
+         * @var     array
          */
-        protected $_directory = 'conversions';
+        protected $_paths = array(
+            'delete' => '/1.6/conversions/:id/',
+            'find' => '/1.6/conversions/',
+            'get' => '/1.6/conversions/:id/'
+        );
     }

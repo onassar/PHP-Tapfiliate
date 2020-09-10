@@ -14,28 +14,34 @@
     final class Commissions extends Base
     {
         /**
-         * _directory
+         * _paths
          * 
          * @access  protected
-         * @var     string (default: 'commissions')
+         * @var     array
          */
-        protected $_directory = 'commissions';
+        protected $_paths = array(
+            'approve' => '/1.6/commissions/:id/approved/',
+            'create' => '/1.6/conversions/:id/commissions/',
+            'disapprove' => '/1.6/commissions/:id/approved/',
+            'find' => '/1.6/commissions/',
+            'put' => '/1.6/commissions/:id/'
+        );
 
         /**
-         * _validateCommissionCreateAttempt
+         * _validateCommissionCreateProperties
          * 
          * @throws  \Exception
          * @access  protected
-         * @param   array $data
+         * @param   array $properties
          * @return  void
          */
-        protected function _validateCommissionCreateAttempt(array $data): void
+        protected function _validateCommissionCreateProperties(array $properties): void
         {
-            if (isset($data['conversion_id']) === false) {
+            if (isset($properties['conversion_id']) === false) {
                 $msg = 'conversion_id must be specified';
                 throw new \Exception($msg);
             }
-            if (isset($data['sub_amount']) === false) {
+            if (isset($properties['sub_amount']) === false) {
                 $msg = 'sub_amount must be specified';
                 throw new \Exception($msg);
             }
@@ -46,30 +52,43 @@
          * 
          * @access  public
          * @param   string $id
-         * @return  false|array
+         * @return  bool
          */
-        public function approve(string $id)
+        public function approve(string $id): bool
         {
-            $endpoint = 'commissions/' . ($id) . '/approved/';
-            $response = $this->_put($endpoint);
-            return $response;
+            $host = $this->_host;
+            $path = $this->_paths['approve'];
+            $path = str_replace(':id', $id, $path);
+            $url = 'https://' . ($host) . ($path);
+            $this->setRequestMethod('put');
+            $this->setURL($url);
+            $response = $this->_getURLResponse() ?? false;
+            if ($response === false) {
+                return false;
+            }
+            return true;
         }
 
         /**
          * create
          * 
          * @access  public
-         * @param   array $data (default: array())
-         * @return  false|array
+         * @param   array $properties
+         * @return  null|array
          */
-        public function create(array $data = array())
+        public function create(array $properties): ?array
         {
-            $this->_validateCommissionCreateAttempt($data);
-            $conversion_id = $data['conversion_id'];
-            unset($data['conversion_id']);
-            $endpoint = 'conversions/' . ($conversion_id) . '/commissions/';
-            $params = array();
-            $response = $this->_post($endpoint, $params, array($data));
+            $this->_validateCommissionCreateProperties($properties);
+            $conversionId = $properties['conversion_id'];
+            unset($properties['conversion_id']);
+            $host = $this->_host;
+            $path = $this->_paths['create'];
+            $path = str_replace(':id', $id, $path);
+            $url = 'https://' . ($host) . ($path);
+            $this->setRequestMethod('post');
+            $this->setURL($url);
+prx($properties);
+            $response = $this->_getURLResponse() ?? null;
             return $response;
         }
 
@@ -78,12 +97,20 @@
          * 
          * @access  public
          * @param   string $id
-         * @return  false|array
+         * @return  bool
          */
-        public function disapprove(string $id)
+        public function disapprove(string $id): bool
         {
-            $endpoint = 'commissions/' . ($id) . '/approved/';
-            $response = $this->_delete($endpoint);
-            return $response;
+            $host = $this->_host;
+            $path = $this->_paths['disapprove'];
+            $path = str_replace(':id', $id, $path);
+            $url = 'https://' . ($host) . ($path);
+            $this->setRequestMethod('delete');
+            $this->setURL($url);
+            $response = $this->_getURLResponse() ?? false;
+            if ($response === false) {
+                return false;
+            }
+            return true;
         }
     }

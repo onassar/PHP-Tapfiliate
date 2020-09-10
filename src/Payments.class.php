@@ -14,27 +14,34 @@
     final class Payments extends Base
     {
         /**
-         * _directory
+         * _paths
          * 
          * @access  protected
-         * @var     string (default: 'payments')
+         * @var     array
          */
-        protected $_directory = 'payments';
+        protected $_paths = array(
+            'paid' => '/1.6/payments/:id/paid/',
+            'find' => '/1.6/payments/'
+        );
 
         /**
          * paid
          * 
-         * Marks a payment as paid.
-         * 
          * @access  public
-         * @param   string|int $id
-         * @return  false|array
+         * @param   string $id
+         * @return  bool
          */
-        public function paid($id)
+        public function paid(string $id): bool
         {
-            $directory = $this->_directory;
-            $endpoint = ($directory) . '/' . ($id) . '/paid/';
-            $response = $this->_put($endpoint);
-            return $response;
+            $host = $this->_host;
+            $path = $this->_paths['paid'];
+            $url = 'https://' . ($host) . ($path);
+            $this->setRequestMethod('put');
+            $this->setURL($url);
+            $response = $this->_getURLResponse() ?? false;
+            if ($response === false) {
+                return false;
+            }
+            return true;
         }
     }
