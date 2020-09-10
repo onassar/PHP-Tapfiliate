@@ -24,6 +24,7 @@
             'create' => '/1.6/conversions/:id/commissions/',
             'disapprove' => '/1.6/commissions/:id/approved/',
             'find' => '/1.6/commissions/',
+            'get' => '/1.6/commissions/:id/',
             'put' => '/1.6/commissions/:id/'
         );
 
