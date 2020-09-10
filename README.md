@@ -10,7 +10,7 @@ Requires
 require_once '/path/to/Factory.class.php';
 $key  = '*****';
 $tapfiliate = new onassar\Tapfiliate\Factory($key);
-$programs = $tapfiliate->programs()->all();
+$programs = $tapfiliate->programs()->find();
 $conversion = $tapfiliate->conversions()->get(123);
 exit(0);
 ```
