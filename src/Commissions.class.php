@@ -84,7 +84,7 @@
             $this->_requestBody = json_encode($properties);
             $this->setRequestMethod('post');
             $this->setURL($url);
-            $response = $this->_getURLResponse() ?? null;
+            $response = $this->_getURLResponse();
             return $response;
         }
 
