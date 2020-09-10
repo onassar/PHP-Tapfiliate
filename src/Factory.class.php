@@ -10,6 +10,7 @@
      * 
      * @author  Oliver Nassar <onassar@gmail.com>
      * @link    https://github.com/onassar/PHP-Tapfiliate
+     * @link    https://tapfiliate.com/docs/rest/
      */
     class Factory
     {
