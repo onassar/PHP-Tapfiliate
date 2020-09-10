@@ -20,13 +20,13 @@
          * @var     array
          */
         protected $_paths = array(
-            'find' => '/1.6/balances/'
+            'list' => '/1.6/balances/'
         );
 
         /**
          * _getPaginationRequestData
          * 
-         * Overrides the parent method since balance find requests will always
+         * Overrides the parent method since balance list requests will always
          * return a non-paginated list of balances.
          * 
          * @access  protected

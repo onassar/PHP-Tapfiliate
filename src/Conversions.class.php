@@ -21,7 +21,7 @@
          */
         protected $_paths = array(
             'delete' => '/1.6/conversions/:id/',
-            'find' => '/1.6/conversions/',
-            'get' => '/1.6/conversions/:id/'
+            'get' => '/1.6/conversions/:id/',
+            'list' => '/1.6/conversions/'
         );
     }

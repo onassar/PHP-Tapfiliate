@@ -20,6 +20,6 @@
          * @var     array
          */
         protected $_paths = array(
-            'find' => '/1.6/programs/'
+            'list' => '/1.6/programs/'
         );
     }

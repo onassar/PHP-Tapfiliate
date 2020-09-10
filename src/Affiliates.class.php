@@ -20,7 +20,7 @@
          * @var     array
          */
         protected $_paths = array(
-            'find' => '/1.6/affiliates/',
-            'get' => '/1.6/affiliates/:id/'
+            'get' => '/1.6/affiliates/:id/',
+            'list' => '/1.6/affiliates/'
         );
     }

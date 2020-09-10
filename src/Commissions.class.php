@@ -23,9 +23,9 @@
             'approve' => '/1.6/commissions/:id/approved/',
             'create' => '/1.6/conversions/:id/commissions/',
             'disapprove' => '/1.6/commissions/:id/approved/',
-            'find' => '/1.6/commissions/',
             'get' => '/1.6/commissions/:id/',
-            'put' => '/1.6/commissions/:id/'
+            'list' => '/1.6/commissions/',
+            'patch' => '/1.6/commissions/:id/'
         );
 
         /**
@@ -38,10 +38,6 @@
          */
         protected function _validateCommissionCreateProperties(array $properties): void
         {
-            if (isset($properties['conversion_id']) === false) {
-                $msg = 'conversion_id must be specified';
-                throw new \Exception($msg);
-            }
             if (isset($properties['sub_amount']) === false) {
                 $msg = 'sub_amount must be specified';
                 throw new \Exception($msg);
@@ -74,22 +70,20 @@
          * create
          * 
          * @access  public
+         * @param   string $conversionId
          * @param   array $properties
          * @return  null|array
          */
-        public function create(array $properties): ?array
+        public function create(string $conversionId, array $properties): ?array
         {
             $this->_validateCommissionCreateProperties($properties);
-            $conversionId = $properties['conversion_id'];
-            unset($properties['conversion_id']);
             $host = $this->_host;
             $path = $this->_paths['create'];
-            $path = str_replace(':id', $id, $path);
+            $path = str_replace(':id', $conversionId, $path);
             $url = 'https://' . ($host) . ($path);
+            $this->_requestBody = json_encode($properties);
             $this->setRequestMethod('post');
             $this->setURL($url);
-el(pr($properties, true));
-prx($properties);
             $response = $this->_getURLResponse() ?? null;
             return $response;
         }

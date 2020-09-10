@@ -20,8 +20,8 @@
          * @var     array
          */
         protected $_paths = array(
-            'paid' => '/1.6/payments/:id/paid/',
-            'find' => '/1.6/payments/'
+            'list' => '/1.6/payments/',
+            'paid' => '/1.6/payments/:id/paid/'
         );
 
         /**

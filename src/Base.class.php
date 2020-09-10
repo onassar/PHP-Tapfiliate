@@ -44,6 +44,14 @@
         protected $_maxAttempts = 1;
 
         /**
+         * _requestBody
+         * 
+         * @access  protected
+         * @var     null|string (default: null)
+         */
+        protected $_requestBody = null;
+
+        /**
          * __construct
          * 
          * @access  public
@@ -152,6 +160,12 @@
             $options = parent::_getRequestStreamContextOptions();
             $header = $this->_getAuthorizationHeader();
             $options['http']['header'] = $header;
+            $options['http']['header'] .= "\r\nContent-type: application/json";
+            $requestBody = $this->_requestBody;
+            if ($requestBody === null) {
+                return $options;
+            }
+            $options['http']['content'] = $this->_requestBody;
             return $options;
         }
 
@@ -187,6 +201,8 @@
         /**
          * delete
          * 
+         * @note    Returns a 204 header (with no content) if it's successful;
+         *          not checking for this, and just assuming it was successful.
          * @access  public
          * @param   string $id
          * @return  bool
@@ -199,43 +215,8 @@
             $url = 'https://' . ($host) . ($path);
             $this->setRequestMethod('delete');
             $this->setURL($url);
-            $response = $this->_getURLResponse() ?? false;
-            if ($response === false) {
-                return false;
-            }
+            $response = $this->_getURLResponse();
             return true;
-        }
-
-        /**
-         * find
-         * 
-         * @access  public
-         * @param   array $params (default: array())
-         * @param   bool $recursive (default: true)
-         * @param   array $recursiveResults (default: array())
-         * @return  array
-         */
-        public function find(array $params = array(), bool $recursive = true, array $recursiveResults = array()): array
-        {
-            $host = $this->_host;
-            $path = $this->_paths['find'];
-            $url = 'https://' . ($host) . ($path);
-            $this->setRequestData($params);
-            $this->setURL($url);
-            $this->_setFindPaginationRequestData();
-            $results = $this->_getURLResponse() ?? array();
-            if ($recursive === false) {
-                return $results;
-            }
-            $recursiveResults = array_merge($recursiveResults, $results);
-            $page = $this->_getFindPage();
-// if ($page === 4) {
-//     prx($recursiveResults);
-// }
-            if ($page === 1) {
-                return $recursiveResults;
-            }
-            return $this->find($params, $recursive, $recursiveResults);
         }
 
         /**
@@ -257,27 +238,59 @@
         }
 
         /**
-         * put
+         * list
+         * 
+         * @access  public
+         * @param   array $params (default: array())
+         * @param   bool $recursive (default: true)
+         * @param   array $recursiveResults (default: array())
+         * @return  array
+         */
+        public function list(array $params = array(), bool $recursive = true, array $recursiveResults = array()): array
+        {
+            $host = $this->_host;
+            $path = $this->_paths['list'];
+            $url = 'https://' . ($host) . ($path);
+            $this->setRequestData($params);
+            $this->setURL($url);
+            $this->_setFindPaginationRequestData();
+            $results = $this->_getURLResponse() ?? array();
+            if ($recursive === false) {
+                return $results;
+            }
+            $recursiveResults = array_merge($recursiveResults, $results);
+            $page = $this->_getFindPage();
+            if ($page === 1) {
+                return $recursiveResults;
+            }
+            return $this->list($params, $recursive, $recursiveResults);
+        }
+
+        /**
+         * patch
          * 
          * @access  public
          * @param   string $id
          * @param   array $properties
          * @return  bool
          */
-        public function put(string $id, array $properties): bool
+        public function patch(string $id, array $properties): bool
         {
             $host = $this->_host;
-            $path = $this->_paths['put'];
+            $path = $this->_paths['patch'];
             $path = str_replace(':id', $id, $path);
             $url = 'https://' . ($host) . ($path);
-            $this->setRequestMethod('put');
+            $this->_requestBody = json_encode($properties);
+            $this->setRequestMethod('patch');
             $this->setURL($url);
-el(pr($properties, true));
-prx($properties);
-            $response = $this->_getURLResponse() ?? false;
-            if ($response === false) {
+            $response = $this->_getURLResponse();
+            if ($response === null) {
                 return false;
             }
-            return true;
+            $errors = $response['errors'] ?? null;
+            if ($errors === null) {
+                return true;
+            }
+            return false;
         }
     }
