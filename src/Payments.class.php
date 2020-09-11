@@ -20,28 +20,27 @@
          * @var     array
          */
         protected $_paths = array(
+            'create' => '/1.6/payments/',
             'list' => '/1.6/payments/',
             'paid' => '/1.6/payments/:id/paid/'
         );
 
         /**
-         * paid
+         * create
          * 
          * @access  public
-         * @param   string $id
-         * @return  bool
+         * @param   array $properties
+         * @return  null|array
          */
-        public function paid(string $id): bool
+        public function create(array $properties): ?array
         {
             $host = $this->_host;
-            $path = $this->_paths['paid'];
+            $path = $this->_paths['create'];
             $url = 'https://' . ($host) . ($path);
-            $this->setRequestMethod('put');
+            $this->_requestBody = json_encode($properties);
+            $this->setRequestMethod('post');
             $this->setURL($url);
-            $response = $this->_getURLResponse() ?? false;
-            if ($response === false) {
-                return false;
-            }
-            return true;
+            $response = $this->_getURLResponse();
+            return $response;
         }
     }
