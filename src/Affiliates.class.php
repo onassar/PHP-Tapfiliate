@@ -21,6 +21,26 @@
          */
         protected $_paths = array(
             'get' => '/1.6/affiliates/:id/',
-            'list' => '/1.6/affiliates/'
+            'list' => '/1.6/affiliates/',
+            'payoutMethods' => '/1.6/affiliates/:id/payout-methods/'
         );
+
+        /**
+         * payoutMethods
+         * 
+         * @access  public
+         * @param   string $id
+         * @return  null|array
+         */
+        public function payoutMethods(string $id): ?array
+        {
+            $host = $this->_host;
+            $path = $this->_paths['payoutMethods'];
+            $path = str_replace(':id', $id, $path);
+            $url = 'https://' . ($host) . ($path);
+            $this->setRequestMethod('get');
+            $this->setURL($url);
+            $response = $this->_getURLResponse();
+            return $response;
+        }
     }
