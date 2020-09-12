@@ -93,31 +93,13 @@
         }
 
         /**
-         * _getFindPage
-         * 
-         * @access  protected
-         * @return  int
-         */
-        protected function _getFindPage(): int
-        {
-            $page = 1;
-            $more = $this->_moreFindResults();
-            if ($more === false) {
-                return $page;
-            }
-            $page = $this->_getHeaderBasedFindPage();
-            return $page;
-        }
-
-
-        /**
-         * _getHeaderBasedFindPage
+         * _getHeaderBasedListPage
          * 
          * @throws  \Exception
          * @access  protected
          * @return  int
          */
-        protected function _getHeaderBasedFindPage(): int
+        protected function _getHeaderBasedListPage(): int
         {
             $headers = $this->_lastRemoteRequestHeaders;
             foreach ($headers as $header) {
@@ -137,6 +119,23 @@
         }
 
         /**
+         * _getListPage
+         * 
+         * @access  protected
+         * @return  int
+         */
+        protected function _getListPage(): int
+        {
+            $page = 1;
+            $more = $this->_moreListResults();
+            if ($more === false) {
+                return $page;
+            }
+            $page = $this->_getHeaderBasedListPage();
+            return $page;
+        }
+
+        /**
          * _getPaginationRequestData
          * 
          * @access  protected
@@ -144,7 +143,7 @@
          */
         protected function _getPaginationRequestData(): array
         {
-            $page = $this->_getFindPage();
+            $page = $this->_getListPage();
             $paginationRequestData = compact('page');
             return $paginationRequestData;
         }
@@ -170,12 +169,12 @@
         }
 
         /**
-         * _moreFindResults
+         * _moreListResults
          * 
          * @access  protected
          * @return  bool
          */
-        protected function _moreFindResults()
+        protected function _moreListResults()
         {
             $headers = $this->_lastRemoteRequestHeaders;
             foreach ($headers as $header) {
@@ -187,12 +186,12 @@
         }
 
         /**
-         * _setFindPaginationRequestData
+         * _setListPaginationRequestData
          * 
          * @access  protected
          * @return  void
          */
-        protected function _setFindPaginationRequestData(): void
+        protected function _setListPaginationRequestData(): void
         {
             $paginationRequestData = $this->_getPaginationRequestData();
             $this->mergeRequestData($paginationRequestData);
@@ -253,13 +252,13 @@
             $url = 'https://' . ($host) . ($path);
             $this->setRequestData($params);
             $this->setURL($url);
-            $this->_setFindPaginationRequestData();
+            $this->_setListPaginationRequestData();
             $results = $this->_getURLResponse() ?? array();
             if ($recursive === false) {
                 return $results;
             }
             $recursiveResults = array_merge($recursiveResults, $results);
-            $page = $this->_getFindPage();
+            $page = $this->_getListPage();
             if ($page === 1) {
                 return $recursiveResults;
             }
