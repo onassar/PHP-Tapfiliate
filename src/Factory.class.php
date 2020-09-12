@@ -15,6 +15,14 @@
     class Factory
     {
         /**
+         * _apiKey
+         * 
+         * @access  protected
+         * @var     null|string (default: null)
+         */
+        protected $_apiKey = null;
+
+        /**
          * _clients
          * 
          * @access  protected
@@ -23,23 +31,15 @@
         protected $_clients = array();
 
         /**
-         * _key
-         * 
-         * @access  protected
-         * @var     null|string (default: null)
-         */
-        protected $_key = null;
-
-        /**
          * __construct
          * 
          * @access  public
-         * @param   string $key
+         * @param   string $apiKey
          * @return  void
          */
-        public function __construct(string $key)
+        public function __construct(string $apiKey)
         {
-            $this->_key = $key;
+            $this->_apiKey = $apiKey;
         }
 
         /**
@@ -95,15 +95,15 @@
         }
 
         /**
-         * getKey
+         * getAPIKey
          * 
          * @access  public
          * @return  string
          */
-        public function getKey(): string
+        public function getAPIKey(): string
         {
-            $key = $this->_key;
-            return $key;
+            $apiKey = $this->_apiKey;
+            return $apiKey;
         }
 
         /**

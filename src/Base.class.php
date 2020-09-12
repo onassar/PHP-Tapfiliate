@@ -73,8 +73,8 @@
         protected function _getAuthorizationHeader(): string
         {
             $factory = $this->_factory;
-            $key = $factory->getKey();
-            $header = 'Api-Key: ' . ($key);
+            $apiKey = $factory->getAPIKey();
+            $header = 'Api-Key: ' . ($apiKey);
             return $header;
         }
 
