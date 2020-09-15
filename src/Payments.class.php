@@ -21,8 +21,7 @@
          */
         protected $_paths = array(
             'create' => '/1.6/payments/',
-            'list' => '/1.6/payments/',
-            'paid' => '/1.6/payments/:id/paid/'
+            'list' => '/1.6/payments/'
         );
 
         /**
