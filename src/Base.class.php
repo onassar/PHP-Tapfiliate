@@ -231,6 +231,7 @@
             $path = $this->_paths['get'];
             $path = str_replace(':id', $id, $path);
             $url = 'https://' . ($host) . ($path);
+            $this->setRequestMethod('get');
             $this->setURL($url);
             $result = $this->_getURLResponse();
             return $result;
