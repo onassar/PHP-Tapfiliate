@@ -17,7 +17,7 @@
          * Traits
          * 
          */
-        use RemoteRequests\RateLimits;
+        use RemoteRequests\Traits\RateLimits;
 
         /**
          * _factory
